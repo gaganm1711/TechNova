@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor - Video Consultation</title>
+    <script defer src="/socket.io/socket.io.js"></script>
+    <script defer src="script.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>🩺 Doctor's Consultation Room</h2>
+        <input type="text" id="roomInput" placeholder="Enter Room ID">
+        <button onclick="joinRoom()">Start Consultation</button>
+        <div id="video-container">
+            <video id="localVideo" autoplay muted></video>
+            <video id="remoteVideo" autoplay></video>
+        </div>
+        <div class="controls">
+            <button onclick="toggleMute()">🎙️ Mute</button>
+            <button onclick="toggleVideo()">📹 Stop Video</button>
+            <button onclick="leaveRoom()">🚪 End Call</button>
+        </div>
+        <div id="chat">
+            <input type="text" id="messageInput" placeholder="Type a message">
+            <button onclick="sendMessage()">Send</button>
+            <div id="chatBox"></div>
+        </div>
+    </div>
+</body>
+</html>
