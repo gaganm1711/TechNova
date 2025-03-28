@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Patient Portal</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #240046, #5a189a);
+            color: white;
+            text-align: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        /* Registration Box */
+        .register-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.3);
+            width: 90%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .register-box h2 {
+            font-size: 1.8em;
+            color: #ff1493;
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .input-field:focus {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #ff1493;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 15px;
+            transition: 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #e60073;
+            transform: scale(1.05);
+        }
+
+        .error {
+            color: #ff4747;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        p a {
+            color: #ff1493;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        p a:hover {
+            text-decoration: underline;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Registration Box -->
+    <div class="register-box">
+        <h2>📝 Register As Patient</h2>
+        <form id="registerForm">
+            <input type="text" id="username" class="input-field" placeholder="Enter Your Username" required>
+            <input type="email" id="email" class="input-field" placeholder="Enter Your Email" required>
+            <input type="password" id="password" class="input-field" placeholder="Enter Your Password" required>
+            <input type="password" id="confirmPassword" class="input-field" placeholder="Confirm Your Password" required>
+            <button type="submit" class="btn">Register</button>
+            <p class="error" id="errorMsg"></p>
+        </form>
+        <p>Already have an account? <a href="patient_login.html">Login Here</a></p>
+    </div>
+
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            let username = document.getElementById("username").value.toLowerCase();
+            let email = document.getElementById("email").value;
+            let password = document.getElementById("password").value;
+            let confirmPassword = document.getElementById("confirmPassword").value;
+            let errorMsg = document.getElementById("errorMsg");
+
+            // Basic validation
+            if (password.length < 6) {
+                errorMsg.textContent = "❌ Password must be at least 6 characters!";
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                errorMsg.textContent = "❌ Passwords do not match!";
+                return;
+            }
+
+            // Get existing users from Local Storage
+            let users = JSON.parse(localStorage.getItem("users")) || {};
+
+            if (users[username]) {
+                errorMsg.textContent = "❌ Username already exists! Choose a different one.";
+                return;
+            }
+
+            // Save new user (For testing, we store password as plain text. In production, use hashing)
+            users[username] = { email: email, password: password };
+            localStorage.setItem("users", JSON.stringify(users));
+
+            alert("✅ Registration Successful! You can now log in.");
+            window.location.href = "patient_login.html"; // Redirect to login page
+        });
+    </script>
+
+</body>
+</html>

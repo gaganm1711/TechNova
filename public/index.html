@@ -3,20 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebRTC Video Call</title>
+    <title>Doctor Video Consultation</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>📞 WebRTC Video Call</h1>
-    <input type="text" id="roomInput" placeholder="Enter Room Code">
-    <button id="joinBtn">Join Call</button>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">Hello Doctor🏥</div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Appointments</a></li>
+            <li><a href="#">Doctors</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Logout</a></li>
+        </ul>
+    </nav>
+
+    <h1>📞 Doctor Video Consultation</h1>
     
-    <div class="video-container">
-        <video id="localVideo" autoplay playsinline></video>
-        <video id="remoteVideo" autoplay playsinline></video>
+    <div class="container">
+        <input type="text" id="roomInput" placeholder="Enter Room Code">
+        <button id="joinBtn">Join Call</button>
+        <button id="endCallBtn" style="display:none;">End Call</button>
+
+        <div class="video-container">
+            <div>
+                <h3>Doctor's View</h3>
+                <video id="localVideo" autoplay playsinline></video>
+            </div>
+            <div>
+                <h3>Patient's View</h3>
+                <video id="remoteVideo" autoplay playsinline></video>
+            </div>
+        </div>
+
+        <div class="call-info" id="billingInfo">
+            <p><strong>⏳ Call Duration:</strong> <span id="callDuration">0:00</span></p>
+            <p><strong>💰 Live Bill:</strong> ₹<span id="totalBill">0</span></p>
+        </div>
+
+        <div class="history-container">
+            <h2>🩺 Patient Medical History</h2>
+            <p><strong>Name:</strong> <span id="patientName">-</span></p>
+            <p><strong>Age:</strong> <span id="patientAge">-</span></p>
+            <p><strong>Previous Conditions:</strong> <span id="patientHistory">-</span></p>
+        </div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="script.js"></script>
+
 </body>
 </html>

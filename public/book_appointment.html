@@ -4,53 +4,216 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Appointment</title>
+    
     <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Background */
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #2a0845, #6441A5);
+            background: linear-gradient(135deg, #240046, #5a189a);
+            min-height: 100vh;
             color: white;
             text-align: center;
-            padding: 20px;
         }
+
+        /* Header */
+        .header {
+            width: 100%;
+            background: black;
+            padding: 20px 0;
+            text-align: center;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        /* Container */
         .container {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 15px;
-            width: 80%;
-            margin: auto;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-        }
-        input, select, button {
-            display: block;
             width: 90%;
-            padding: 10px;
-            margin: 10px auto;
+            max-width: 500px;
+            background: rgba(78, 0, 114, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin: 40px auto;
+        }
+
+        .container h2 {
+            color: #FF007F;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        /* Input Fields */
+        select, input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
             border: none;
-            border-radius: 5px;
             font-size: 16px;
         }
-        button {
-            background: #ff006e;
+
+        /* Button */
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: #FF007F;
             color: white;
+            font-size: 18px;
+            border-radius: 40px;
+            border: none;
             cursor: pointer;
+            transition: 0.3s;
         }
-        button:hover {
-            background: #d10058;
+
+        .btn:hover {
+            background: #D6006C;
         }
+
+        /* Appointment Details */
+        .appointment-details {
+            display: none;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .appointment-details h3 {
+            color: #00FF88;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .appointment-details p {
+            color: white;
+            font-size: 18px;
+        }
+
+        /* View History Button */
+        .view-history {
+            margin-top: 20px;
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            background: #00FF88;
+            padding: 12px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .view-history:hover {
+            background: #008f5c;
+        }
+
     </style>
 </head>
 <body>
+
+    <!-- Header -->
+    <div class="header">Book Appointment</div>
+
+    <!-- Main Container -->
     <div class="container">
-        <h1>📅 Book Appointment</h1>
-        <input type="text" placeholder="Enter Your Name">
-        <select>
-            <option>Select Doctor</option>
-            <option>Dr. Sharma (Cardiologist)</option>
-            <option>Dr. Gupta (Dermatologist)</option>
+        <h2>Select Doctor & Time</h2>
+
+        <label for="doctor">Choose Doctor:</label>
+        <select id="doctor">
+            <option value="Dr. Sharma - Cardiologist">Dr. Sharma - Cardiologist</option>
+            <option value="Dr. Gupta - Dermatologist">Dr. Gupta - Dermatologist</option>
+            <option value="Dr. Patel - General Physician">Dr. Patel - General Physician</option>
         </select>
-        <input type="date">
-        <button>Confirm Appointment</button>
+
+        <label for="appointment-time">Select Time:</label>
+        <input type="datetime-local" id="appointment-time">
+
+        <button class="btn" onclick="bookAppointment()">📅 Book Appointment</button>
+
+        <!-- Appointment Details -->
+        <div class="appointment-details" id="appointment-details">
+            <h3>📅 Appointment Confirmed</h3>
+            <p><strong>Doctor:</strong> <span id="selected-doctor"></span></p>
+            <p><strong>Time:</strong> <span id="selected-time"></span></p>
+            <p><strong>Token Number:</strong> <span id="token-number"></span></p>
+            <p><strong>Time Remaining:</strong> <span id="countdown"></span></p>
+        </div>
+
+        <!-- Button to View Medical History -->
+        <a href="m" class="view-history">📜 View Medical History</a>
     </div>
+
+    <script>
+        function bookAppointment() {
+            let doctor = document.getElementById("doctor").value;
+            let appointmentTime = document.getElementById("appointment-time").value;
+
+            if (appointmentTime === "") {
+                alert("Please select an appointment time!");
+                return;
+            }
+
+            let token = Math.floor(1000 + Math.random() * 9000); // Generate a 4-digit token number
+
+            // Save appointment details
+            let appointmentData = {
+                doctor: doctor,
+                time: appointmentTime,
+                token: token
+            };
+
+            localStorage.setItem("patientAppointment", JSON.stringify(appointmentData));
+
+            // Save to Medical History
+            let history = JSON.parse(localStorage.getItem("medicalHistory")) || [];
+            history.push(appointmentData);
+            localStorage.setItem("medicalHistory", JSON.stringify(history));
+
+            // Show appointment details
+            document.getElementById("selected-doctor").innerText = doctor;
+            document.getElementById("selected-time").innerText = new Date(appointmentTime).toLocaleString();
+            document.getElementById("token-number").innerText = token;
+            document.getElementById("appointment-details").style.display = "block";
+
+            startCountdown(appointmentTime);
+        }
+
+        function startCountdown(appointmentTime) {
+            let appointmentDate = new Date(appointmentTime).getTime();
+
+            setInterval(function () {
+                let now = new Date().getTime();
+                let timeLeft = appointmentDate - now;
+
+                let hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                let minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+
+                document.getElementById("countdown").innerText = hours + "h " + minutes + "m";
+            }, 1000);
+        }
+
+        // Load appointment details if already booked
+        window.onload = function () {
+            let savedAppointment = localStorage.getItem("patientAppointment");
+            if (savedAppointment) {
+                let appointmentData = JSON.parse(savedAppointment);
+                document.getElementById("selected-doctor").innerText = appointmentData.doctor;
+                document.getElementById("selected-time").innerText = new Date(appointmentData.time).toLocaleString();
+                document.getElementById("token-number").innerText = appointmentData.token;
+                document.getElementById("appointment-details").style.display = "block";
+
+                startCountdown(appointmentData.time);
+            }
+        };
+    </script>
+
 </body>
 </html>

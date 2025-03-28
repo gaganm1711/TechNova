@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Portal</title>
+    <title>Patient Dashboard</title>
     
     <style>
         /* Global Styles */
@@ -16,8 +16,10 @@
 
         /* Background */
         body {
-            background: linear-gradient(135deg, #200030, #3D005E);
+            background: linear-gradient(135deg, #240046, #5a189a);
             min-height: 100vh;
+            color: white;
+            text-align: center;
         }
 
         /* Header */
@@ -72,7 +74,7 @@
             margin-bottom: 20px;
         }
 
-        /* Section Backgrounds */
+        /* Sections */
         .section {
             background: rgba(255, 255, 255, 0.1);
             padding: 20px;
@@ -91,17 +93,6 @@
             color: #E0E0E0;
             font-size: 18px;
             margin-bottom: 8px;
-        }
-
-        /* Input Fields */
-        input, select {
-            width: 100%;
-            padding: 16px;
-            margin-top: 12px;
-            border-radius: 8px;
-            border: none;
-            font-size: 18px;
-            outline: none;
         }
 
         /* Buttons */
@@ -126,8 +117,8 @@
             background: #D6006C;
         }
 
-        /* Confirmation Box */
-        .confirmation {
+        /* Appointment Details */
+        .appointment-box {
             display: none;
             background: rgba(255, 255, 255, 0.2);
             padding: 20px;
@@ -135,102 +126,98 @@
             margin-top: 20px;
         }
 
-        .confirmation h3 {
+        .appointment-box h3 {
             color: #00FF88;
             font-size: 24px;
             margin-bottom: 10px;
         }
 
-        .confirmation p {
+        .appointment-box p {
             color: white;
             font-size: 20px;
         }
 
+        /* Logout Button */
+        .logout-btn {
+            background: #FF4747;
+        }
+
+        .logout-btn:hover {
+            background: #D6006C;
+        }
     </style>
 </head>
 <body>
 
     <!-- Header -->
-    <div class="header">Patient Portal</div>
+    <div class="header">Patient Dashboard</div>
 
     <!-- Navigation Bar -->
     <div class="navbar">
-        <a href="#">Home</a>
-        <a href="#">Book Appointment</a>
-        <a href="#">Doctors</a>
-        <a href="#">Medical History</a>
-        <a href="#">Reports</a>
-        <a href="#">Video Consultation</a>
+        <a href="book_appointment.html">📅 Book Appointment</a>
+        <a href="doctor_listing.html">👨‍⚕️ Doctors</a>
+        <a href="medical_history.html">📜 Medical History</a>
+        <a href="medical_report.html">🩺 Reports</a>
+        <a href="index.html">📹 Video Consultation</a>
     </div>
 
     <!-- Main Content -->
     <div class="container">
-        <h2>Welcome, Patient</h2>
-        
-        <!-- Book Appointment Section -->
-        <div class="section" id="booking-section">
-            <h3>📅 Book Appointment</h3>
-            <input type="text" id="patient-name" placeholder="Enter Your Name">
-            <select id="doctor">
-                <option>Dr. Sharma (Cardiologist)</option>
-                <option>Dr. Gupta (Dermatologist)</option>
-                <option>Dr. Patel (General Physician)</option>
-            </select>
-            <input type="datetime-local" id="appointment-time">
-            <button class="btn" onclick="bookAppointment()">Book Now</button>
+        <h2>Welcome, <span id="patient-name">Patient</span>! 👋</h2>
+
+        <!-- Medical History Preview -->
+        <div class="section">
+            <h3>📜 Your Medical History</h3>
+            <p><strong>Last Visit:</strong> <span id="last-visit">Not available</span></p>
+            <p><strong>Current Medications:</strong> <span id="medications">Not available</span></p>
+            <a href="medical_history.html" class="btn">View Full History</a>
         </div>
 
-        <!-- Appointment Confirmation Section -->
-        <div class="confirmation" id="confirmation">
-            <h3>✅ Appointment Booked Successfully!</h3>
-            <p><strong>Doctor:</strong> <span id="confirmed-doctor"></span></p>
-            <p><strong>Appointment Time:</strong> <span id="confirmed-time"></span></p>
+        <!-- Upcoming Appointments -->
+        <div class="appointment-box" id="appointment-box">
+            <h3>📅 Your Next Appointment</h3>
+            <p><strong>Doctor:</strong> <span id="doctor-name"></span></p>
+            <p><strong>Time:</strong> <span id="appointment-time"></span></p>
             <p><strong>Token Number:</strong> <span id="token-number"></span></p>
             <p><strong>Time Remaining:</strong> <span id="countdown"></span></p>
         </div>
 
+        <!-- Logout Button -->
+        <button class="btn logout-btn" id="logoutBtn">🚪 Logout</button>
     </div>
 
     <script>
-        function bookAppointment() {
-            // Get values
-            let name = document.getElementById("patient-name").value;
-            let doctor = document.getElementById("doctor").value;
-            let time = document.getElementById("appointment-time").value;
-            let token = Math.floor(1000 + Math.random() * 9000); // Random 4-digit token
+        // Check if user is logged in
+        let loggedInUser = localStorage.getItem("loggedInUser");
 
-            if (name === "" || time === "") {
-                alert("Please enter your name and select a time.");
-                return;
-            }
+        if (loggedInUser) {
+            document.getElementById("patient-name").innerText = loggedInUser;
+            
+            // Fetch Personalized Medical History (Dummy Data)
+            document.getElementById("last-visit").innerText = "March 10, 2025";
+            document.getElementById("medications").innerText = "Paracetamol, Vitamin D";
 
-            // Show confirmation
-            document.getElementById("confirmed-doctor").innerText = doctor;
-            document.getElementById("confirmed-time").innerText = time;
-            document.getElementById("token-number").innerText = token;
-            document.getElementById("confirmation").style.display = "block";
+            // Fetch Upcoming Appointment (Dummy Data)
+            let upcomingAppointment = {
+                doctor: "Dr. Sharma (Cardiologist)",
+                time: "2025-04-05T15:30",
+                token: Math.floor(1000 + Math.random() * 9000)
+            };
 
-            // Hide booking section
-            document.getElementById("booking-section").style.display = "none";
-
-            // Start Countdown
-            let appointmentTime = new Date(time).getTime();
-            setInterval(function () {
-                let now = new Date().getTime();
-                let distance = appointmentTime - now;
-                
-                if (distance < 0) {
-                    document.getElementById("countdown").innerText = "Your appointment time has passed.";
-                    return;
-                }
-
-                let hours = Math.floor(distance / (1000 * 60 * 60));
-                let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                
-                document.getElementById("countdown").innerText = hours + "h " + minutes + "m " + seconds + "s";
-            }, 1000);
+            document.getElementById("doctor-name").innerText = upcomingAppointment.doctor;
+            document.getElementById("appointment-time").innerText = new Date(upcomingAppointment.time).toLocaleString();
+            document.getElementById("token-number").innerText = upcomingAppointment.token;
+            document.getElementById("appointment-box").style.display = "block";
         }
+
+        // Logout function
+        document.getElementById("logoutBtn").addEventListener("click", function() {
+            localStorage.removeItem("loggedInUser");
+            alert("Logged out successfully!");
+
+            // Redirect to login page after logout
+            window.location.href = "patient_login.html"; // Change "login.html" to your actual login page
+        });
     </script>
 
 </body>

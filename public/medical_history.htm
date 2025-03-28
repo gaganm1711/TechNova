@@ -3,49 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medical History</title>
+    <title>Medical History Form</title>
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #2a0845, #6441A5);
+            font-family: Arial, sans-serif;
+            background-color: #240046;
             color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #4b0082;
+            padding: 15px;
             text-align: center;
-            padding: 20px;
         }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 20px;
+            font-size: 18px;
+        }
+
         .container {
-            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             padding: 20px;
-            border-radius: 15px;
-            width: 80%;
-            margin: auto;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
         }
-        h1 {
-            color: #ff006e;
+
+        .form-box {
+            background-color: #3a005b;
+            padding: 40px;
+            border-radius: 10px;
+            width: 50%;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
         }
-        .history-list {
-            text-align: left;
-            margin-top: 20px;
+
+        h2 {
+            color: #ff0080;
+            text-align: center;
         }
-        .history-list li {
-            background: #e9ecef;
-            margin: 10px 0;
-            padding: 10px;
+
+        .input-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        input, select {
+            width: 48%;
+            padding: 12px;
             border-radius: 5px;
-            color: black;
+            border: none;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            background: #ff0080;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #ff1493;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>📜 Medical History</h1>
-        <ul class="history-list">
-            <li>Diabetes - Diagnosed in 2015</li>
-            <li>Hypertension - Under control with medication</li>
-            <li>Past Surgery: Appendectomy (2018)</li>
-            <li>Allergy: Penicillin</li>
-        </ul>
+
+    <div class="navbar">
+        <a href="home.html">Home</a>
+        <a href="home.html">Book Appointment</a>
+        <a href="#">Doctors</a>
+        <a href="medical_history_display.html">Medical History</a>
+        <a href="#">Reports</a>
+        <a href="index.html">Video Consultation</a>
     </div>
+
+    <div class="container">
+        <div class="form-box">
+            <h2>Medical History Form 🏥</h2>
+            <form id="medicalHistoryForm">
+                <div class="input-group">
+                    <input type="text" id="name" placeholder="Full Name" required>
+                    <input type="number" id="age" placeholder="Age" required>
+                </div>
+                <div class="input-group">
+                    <select id="gender">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <input type="text" id="diseases" placeholder="Family Diseases" required>
+                </div>
+                <input type="text" id="surgeries" placeholder="Past Surgeries">
+                <input type="text" id="allergies" placeholder="Allergies">
+                <input type="text" id="medications" placeholder="Current Medications">
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("medicalHistoryForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const userData = {
+                name: document.getElementById("name").value,
+                age: document.getElementById("age").value,
+                gender: document.getElementById("gender").value,
+                diseases: document.getElementById("diseases").value,
+                surgeries: document.getElementById("surgeries").value,
+                allergies: document.getElementById("allergies").value,
+                medications: document.getElementById("medications").value
+            };
+            localStorage.setItem("medicalHistory", JSON.stringify(userData));
+            window.location.href = "medical_history_display.html";
+        });
+    </script>
+
 </body>
 </html>

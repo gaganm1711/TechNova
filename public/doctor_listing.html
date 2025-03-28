@@ -4,13 +4,120 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Listings</title>
+
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Background */
+        body {
+            background: linear-gradient(135deg, #240046, #5a189a);
+            min-height: 100vh;
+            color: white;
+            text-align: center;
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            background: black;
+            padding: 20px 0;
+            text-align: center;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* Main Container */
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: rgba(78, 0, 114, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin: 40px auto;
+        }
+
+        .container h2 {
+            color: #FF007F;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        /* Doctor List */
+        .doctor-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .doctor-list li {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 12px;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* Back Button */
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            margin-top: 20px;
+            background: #FF007F;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #D6006C;
+        }
+    </style>
 </head>
 <body>
-    <h1>Doctor Listings</h1>
-    <ul>
-        <li>Dr. Sharma - Cardiologist</li>
-        <li>Dr. Gupta - Dermatologist</li>
-        <li>Dr. Patel - General Physician</li>
-    </ul>
+
+    <!-- Header -->
+    <div class="header">Doctor Listings</div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2>Available Doctors</h2>
+        <ul class="doctor-list" id="doctorList">
+            <!-- Doctors will be added dynamically -->
+        </ul>
+        <a href="doctor_registration.html" class="btn">➕ Register as Doctor</a>
+    </div>
+
+    <script>
+        // Fetch registered doctors from localStorage
+        let doctors = JSON.parse(localStorage.getItem("doctors")) || [];
+
+        // Display doctors in the list
+        let doctorListElement = document.getElementById("doctorList");
+
+        if (doctors.length > 0) {
+            doctors.forEach(doctor => {
+                let li = document.createElement("li");
+                li.textContent = `${doctor.name} - ${doctor.specialization}`;
+                doctorListElement.appendChild(li);
+            });
+        } else {
+            doctorListElement.innerHTML = "<p>No doctors registered yet.</p>";
+        }
+    </script>
+
 </body>
 </html>

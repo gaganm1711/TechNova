@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Registration</title>
+
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Background */
+        body {
+            background: linear-gradient(135deg, #240046, #5a189a);
+            min-height: 100vh;
+            color: white;
+            text-align: center;
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            background: black;
+            padding: 20px 0;
+            text-align: center;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* Main Container */
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: rgba(78, 0, 114, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin: 40px auto;
+        }
+
+        .container h2 {
+            color: #FF007F;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        /* Register Button */
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: #FF007F;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn:hover {
+            background: #D6006C;
+        }
+
+        /* Back Button */
+        .back-btn {
+            display: inline-block;
+            margin-top: 15px;
+            font-size: 16px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">Doctor Registration</div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2>Register as a Doctor</h2>
+
+        <form id="doctorForm">
+            <div class="form-group">
+                <label for="name">👨‍⚕️ Full Name:</label>
+                <input type="text" id="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="specialization">🏥 Specialization:</label>
+                <select id="specialization" required>
+                    <option value="">Select Specialization</option>
+                    <option value="Cardiologist">Cardiologist</option>
+                    <option value="Dermatologist">Dermatologist</option>
+                    <option value="General Physician">General Physician</option>
+                    <option value="Neurologist">Neurologist</option>
+                    <option value="Orthopedic">Orthopedic</option>
+                    <option value="Pediatrician">Pediatrician</option>
+                    <option value="Psychiatrist">Psychiatrist</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn">✅ Register</button>
+        </form>
+
+        <a href="doctor_listing.html" class="back-btn">🔙 Back to Doctor Listings</a>
+    </div>
+
+    <script>
+        document.getElementById("doctorForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            let name = document.getElementById("name").value;
+            let specialization = document.getElementById("specialization").value;
+
+            if (!name || !specialization) {
+                alert("Please fill out all fields.");
+                return;
+            }
+
+            // Fetch existing doctors or create an empty array
+            let doctors = JSON.parse(localStorage.getItem("doctors")) || [];
+
+            // Add new doctor
+            doctors.push({ name, specialization });
+
+            // Save back to localStorage
+            localStorage.setItem("doctors", JSON.stringify(doctors));
+
+            alert("Doctor registered successfully!");
+
+            // Redirect to the Doctor Listings page
+            window.location.href = "doctor_listing.html";
+        });
+    </script>
+
+</body>
+</html>
