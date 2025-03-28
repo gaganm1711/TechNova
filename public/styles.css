@@ -1,14 +1,47 @@
+/* General Styling */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
     text-align: center;
-    background: #f5f5f5;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
     padding: 20px;
+    margin: 0;
 }
 
+/* Heading */
 h1 {
-    color: #007bff;
+    font-size: 28px;
+    margin-bottom: 20px;
 }
 
+/* Input Field */
+input {
+    width: 250px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: none;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Button */
+button {
+    background: #ff416c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #ff4b2b;
+}
+
+/* Video Container */
 .video-container {
     display: flex;
     justify-content: center;
@@ -16,18 +49,17 @@ h1 {
     margin-top: 20px;
 }
 
+/* Video Frames */
 video {
-    width: 45%;
-    border: 3px solid #007bff;
+    width: 40%;
+    height: auto;
     border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
-button {
-    padding: 10px 20px;
-    margin-top: 15px;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    background: #007bff;
-    color: white;
-    font-size: 16px;
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    video {
+        width: 90%;
+    }
 }

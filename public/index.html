@@ -8,15 +8,13 @@
 </head>
 <body>
     <h1>📞 WebRTC Video Call</h1>
-
-    <!-- ✅ Local Video -->
-    <video id="localVideo" autoplay playsinline></video>
-
-    <!-- ✅ Remote Video -->
-    <video id="remoteVideo" autoplay playsinline></video>
-
-    <br>
-    <button id="startCall">Start Call</button>
+    <input type="text" id="roomInput" placeholder="Enter Room Code">
+    <button id="joinBtn">Join Call</button>
+    
+    <div class="video-container">
+        <video id="localVideo" autoplay playsinline></video>
+        <video id="remoteVideo" autoplay playsinline></video>
+    </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="script.js"></script>

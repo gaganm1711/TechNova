@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Portal</title>
+    
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Background */
+        body {
+            background: linear-gradient(135deg, #200030, #3D005E);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            background: black;
+            padding: 20px 0;
+            text-align: center;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: center;
+            background: rgba(78, 0, 114, 0.9);
+            padding: 15px 0;
+        }
+
+        .navbar a {
+            color: white;
+            font-size: 18px;
+            padding: 12px 20px;
+            text-decoration: none;
+            margin: 0 10px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .navbar a:hover {
+            background: #FF007F;
+        }
+
+        /* Main Container */
+        .container {
+            width: 90%;
+            max-width: 800px;
+            background: rgba(78, 0, 114, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin: 40px auto;
+        }
+
+        .container h2 {
+            color: #FF007F;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        /* Section Backgrounds */
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .section h3 {
+            color: #FF007F;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .section p {
+            color: #E0E0E0;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        /* Input Fields */
+        input, select {
+            width: 100%;
+            padding: 16px;
+            margin-top: 12px;
+            border-radius: 8px;
+            border: none;
+            font-size: 18px;
+            outline: none;
+        }
+
+        /* Buttons */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            margin-top: 20px;
+            text-decoration: none;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            background: #FF007F;
+            border-radius: 40px;
+            text-align: center;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #D6006C;
+        }
+
+        /* Confirmation Box */
+        .confirmation {
+            display: none;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .confirmation h3 {
+            color: #00FF88;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .confirmation p {
+            color: white;
+            font-size: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">Patient Portal</div>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="#">Home</a>
+        <a href="#">Book Appointment</a>
+        <a href="#">Doctors</a>
+        <a href="#">Medical History</a>
+        <a href="#">Reports</a>
+        <a href="#">Video Consultation</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2>Welcome, Patient</h2>
+        
+        <!-- Book Appointment Section -->
+        <div class="section" id="booking-section">
+            <h3>📅 Book Appointment</h3>
+            <input type="text" id="patient-name" placeholder="Enter Your Name">
+            <select id="doctor">
+                <option>Dr. Sharma (Cardiologist)</option>
+                <option>Dr. Gupta (Dermatologist)</option>
+                <option>Dr. Patel (General Physician)</option>
+            </select>
+            <input type="datetime-local" id="appointment-time">
+            <button class="btn" onclick="bookAppointment()">Book Now</button>
+        </div>
+
+        <!-- Appointment Confirmation Section -->
+        <div class="confirmation" id="confirmation">
+            <h3>✅ Appointment Booked Successfully!</h3>
+            <p><strong>Doctor:</strong> <span id="confirmed-doctor"></span></p>
+            <p><strong>Appointment Time:</strong> <span id="confirmed-time"></span></p>
+            <p><strong>Token Number:</strong> <span id="token-number"></span></p>
+            <p><strong>Time Remaining:</strong> <span id="countdown"></span></p>
+        </div>
+
+    </div>
+
+    <script>
+        function bookAppointment() {
+            // Get values
+            let name = document.getElementById("patient-name").value;
+            let doctor = document.getElementById("doctor").value;
+            let time = document.getElementById("appointment-time").value;
+            let token = Math.floor(1000 + Math.random() * 9000); // Random 4-digit token
+
+            if (name === "" || time === "") {
+                alert("Please enter your name and select a time.");
+                return;
+            }
+
+            // Show confirmation
+            document.getElementById("confirmed-doctor").innerText = doctor;
+            document.getElementById("confirmed-time").innerText = time;
+            document.getElementById("token-number").innerText = token;
+            document.getElementById("confirmation").style.display = "block";
+
+            // Hide booking section
+            document.getElementById("booking-section").style.display = "none";
+
+            // Start Countdown
+            let appointmentTime = new Date(time).getTime();
+            setInterval(function () {
+                let now = new Date().getTime();
+                let distance = appointmentTime - now;
+                
+                if (distance < 0) {
+                    document.getElementById("countdown").innerText = "Your appointment time has passed.";
+                    return;
+                }
+
+                let hours = Math.floor(distance / (1000 * 60 * 60));
+                let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                document.getElementById("countdown").innerText = hours + "h " + minutes + "m " + seconds + "s";
+            }, 1000);
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #2a0845, #6441A5);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            width: 80%;
+            margin: auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        input, select, button {
+            display: block;
+            width: 90%;
+            padding: 10px;
+            margin: 10px auto;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background: #ff006e;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #d10058;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📅 Book Appointment</h1>
+        <input type="text" placeholder="Enter Your Name">
+        <select>
+            <option>Select Doctor</option>
+            <option>Dr. Sharma (Cardiologist)</option>
+            <option>Dr. Gupta (Dermatologist)</option>
+        </select>
+        <input type="date">
+        <button>Confirm Appointment</button>
+    </div>
+</body>
+</html>

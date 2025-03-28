@@ -1,77 +1,58 @@
 const socket = io();
-const localVideo = document.getElementById("localVideo");
-const remoteVideo = document.getElementById("remoteVideo");
-const startCallBtn = document.getElementById("startCall");
-
 let localStream;
 let peerConnection;
+const roomInput = document.getElementById("roomInput");
+const joinBtn = document.getElementById("joinBtn");
+const localVideo = document.getElementById("localVideo");
+const remoteVideo = document.getElementById("remoteVideo");
+
 const config = {
     iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
 };
 
-// 🔹 Get User Media (Access Camera)
-async function startCall() {
-    try {
-        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        localVideo.srcObject = localStream;
-
-        peerConnection = new RTCPeerConnection(config);
-
-        // Add local stream tracks to peer connection
-        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-
-        peerConnection.ontrack = event => {
-            remoteVideo.srcObject = event.streams[0]; // Show remote video
-        };
-
-        peerConnection.onicecandidate = event => {
-            if (event.candidate) {
-                socket.emit("ice-candidate", event.candidate);
-            }
-        };
-
-        // Create Offer and Send to Peer
-        const offer = await peerConnection.createOffer();
-        await peerConnection.setLocalDescription(offer);
-        socket.emit("offer", offer);
-    } catch (error) {
-        console.error("Error accessing camera:", error);
+joinBtn.addEventListener("click", async () => {
+    const roomId = roomInput.value.trim();
+    if (!roomId) {
+        alert("Enter a valid room code!");
+        return;
     }
-}
-
-// Handle Offer from Peer
-socket.on("offer", async offer => {
-    peerConnection = new RTCPeerConnection(config);
-
-    peerConnection.ontrack = event => {
-        remoteVideo.srcObject = event.streams[0]; // Show remote video
-    };
-
-    peerConnection.onicecandidate = event => {
-        if (event.candidate) {
-            socket.emit("ice-candidate", event.candidate);
-        }
-    };
+    
+    socket.emit("join-room", roomId);
 
     localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
     localVideo.srcObject = localStream;
 
+    peerConnection = new RTCPeerConnection(config);
     localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
 
-    await peerConnection.setRemoteDescription(offer);
-    const answer = await peerConnection.createAnswer();
-    await peerConnection.setLocalDescription(answer);
-    socket.emit("answer", answer);
-});
+    peerConnection.ontrack = event => {
+        remoteVideo.srcObject = event.streams[0];
+    };
 
-// Handle Answer from Peer
-socket.on("answer", answer => {
-    peerConnection.setRemoteDescription(answer);
-});
+    peerConnection.onicecandidate = event => {
+        if (event.candidate) {
+            socket.emit("ice-candidate", { roomId, candidate: event.candidate });
+        }
+    };
 
-// Handle ICE Candidates
-socket.on("ice-candidate", candidate => {
-    peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
-});
+    socket.on("offer", async ({ offer }) => {
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+        const answer = await peerConnection.createAnswer();
+        await peerConnection.setLocalDescription(answer);
+        socket.emit("answer", { roomId, answer });
+    });
 
-startCallBtn.addEventListener("click", startCall);
+    socket.on("answer", async ({ answer }) => {
+        await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+    });
+
+    socket.on("ice-candidate", ({ candidate }) => {
+        peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+    });
+
+    if (!peerConnection.remoteDescription) {
+        const offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+        socket.emit("offer", { roomId, offer });
+    }
+});
